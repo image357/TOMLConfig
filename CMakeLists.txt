@@ -22,9 +22,12 @@ endif ()
 # targets
 add_library(
         lib
+        src/utils/static_ptr.h
         src/resource/IResource.h
         src/resource/ResourceType.h
+        src/resource/ResourceException.h
         src/resource/NullResource.cpp src/resource/NullResource.h
+        src/resource/NodeResource.cpp src/resource/NodeResource.h
 )
 
 target_link_libraries(
