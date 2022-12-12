@@ -22,7 +22,10 @@ endif ()
 # targets
 add_library(
         lib
-        src/IResource.cpp include/TOMLConfig/IResource.h)
+        src/resource/IResource.h
+        src/resource/ResourceType.h
+        src/resource/NullResource.cpp src/resource/NullResource.h
+)
 
 target_link_libraries(
         lib
