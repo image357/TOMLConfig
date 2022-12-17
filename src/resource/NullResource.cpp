@@ -6,6 +6,7 @@
 //
 
 #include "NullResource.h"
+#include "ResourceException.h"
 
 namespace tcfg {
 
@@ -33,6 +34,11 @@ NullResource& NullResource::get_instance()
 {
     static NullResource instance;
     return instance;
+}
+
+void NullResource::set_parent(IResource* resource)
+{
+    throw ResourceException("Cannot set parent on NullResource.");
 }
 
 } // tcfg

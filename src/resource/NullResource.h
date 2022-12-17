@@ -23,10 +23,13 @@ public:
     toml::value as_toml() const override;
 
 private:
-    NullResource() = default;
+    void set_parent(IResource* resource) override;
+
 public:
     NullResource(const NullResource&) = delete;
     void operator=(const NullResource&) = delete;
+private:
+    NullResource() = default;
 };
 
 } // tcfg

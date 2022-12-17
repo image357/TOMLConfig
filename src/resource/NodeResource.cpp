@@ -10,19 +10,8 @@
 
 namespace tcfg {
 
-void NodeResource::add_child(const std::shared_ptr<NodeResource>& resource)
-{
-    auto [it, flag] = m_children.try_emplace(resource->get_name(), resource);
-    if (!flag) {
-        throw ResourceException("Cannot add child.");
-    }
-    resource->set_parent(this);
-}
-
-void NodeResource::set_parent(IResource* parent)
-{
-    m_parent = parent;
-}
+NodeResource::NodeResource(const std::string& name)
+        :m_name(name) { }
 
 std::string NodeResource::get_name() const
 {
@@ -46,6 +35,20 @@ toml::value NodeResource::as_toml() const
         value[it.second->get_name()] = it.second->as_toml();
     }
     return value;
+}
+
+void NodeResource::register_child(const std::shared_ptr<IResource>& resource)
+{
+    auto [it, flag] = m_children.try_emplace(resource->get_name(), resource);
+    if (!flag) {
+        throw ResourceException("Cannot add child.");
+    }
+    resource->set_parent(this);
+}
+
+void NodeResource::set_parent(IResource* resource)
+{
+    m_parent = resource;
 }
 
 } // tcfg

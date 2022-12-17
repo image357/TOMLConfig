@@ -15,21 +15,25 @@
 
 namespace tcfg {
 
-class NodeResource : public IResource {
+class NodeResource : public IResource, public std::enable_shared_from_this<NodeResource> {
 private:
     std::string m_name;
-    IResource* m_parent;
+    const IResource* m_parent;
     std::unordered_map<std::string, std::shared_ptr<const IResource>> m_children;
 
 public:
-    void add_child(const std::shared_ptr<NodeResource>& resource);
+    NodeResource(const std::string& name);
+    ~NodeResource() override = default;
+
     std::string get_name() const override;
     std::string get_path() const override;
     ResourceType get_type() const override;
     toml::value as_toml() const override;
 
+    void register_child(const std::shared_ptr<IResource>& resource);
+
 private:
-    void set_parent(IResource* parent);
+    void set_parent(IResource* resource) override;
 };
 
 } // tcfg
