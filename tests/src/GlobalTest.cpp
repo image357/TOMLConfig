@@ -41,18 +41,26 @@ TEST_F(GlobalTest, scanDirectory)
 TEST_F(GlobalTest, testBasicTOML)
 {
     auto basic = toml::parse(RESOURCE_PATH "basic.toml");
+
+    ASSERT_EQ(basic.size(), 5);
     ASSERT_TRUE(basic.contains("a"));
     ASSERT_TRUE(basic.contains("b"));
     ASSERT_TRUE(basic.contains("c"));
     ASSERT_TRUE(basic.contains("table1"));
+    ASSERT_TRUE(basic.contains("table2"));
+
+    ASSERT_EQ(basic["table1"].size(), 3);
     ASSERT_TRUE(basic["table1"].contains("a"));
     ASSERT_TRUE(basic["table1"].contains("b"));
     ASSERT_TRUE(basic["table1"].contains("c"));
-    ASSERT_TRUE(basic.contains("table2"));
+
+    ASSERT_EQ(basic["table2"].size(), 4);
     ASSERT_TRUE(basic["table2"].contains("a"));
     ASSERT_TRUE(basic["table2"].contains("b"));
     ASSERT_TRUE(basic["table2"].contains("c"));
     ASSERT_TRUE(basic["table2"].contains("subtable1"));
+
+    ASSERT_EQ(basic["table2"]["subtable1"].size(), 3);
     ASSERT_TRUE(basic["table2"]["subtable1"].contains("d"));
     ASSERT_TRUE(basic["table2"]["subtable1"].contains("e"));
     ASSERT_TRUE(basic["table2"]["subtable1"].contains("f"));
@@ -60,12 +68,15 @@ TEST_F(GlobalTest, testBasicTOML)
     ASSERT_EQ(basic["a"].as_integer(), 1);
     ASSERT_EQ(basic["b"].as_floating(), 2.0);
     ASSERT_EQ(basic["c"].as_string(), "c");
+
     ASSERT_EQ(basic["table1"]["a"].as_integer(), 3);
     ASSERT_EQ(basic["table1"]["b"].as_floating(), 4.0);
     ASSERT_EQ(basic["table1"]["c"].as_string(), "c");
+
     ASSERT_EQ(basic["table2"]["a"].as_integer(), 5);
     ASSERT_EQ(basic["table2"]["b"].as_floating(), 6.0);
     ASSERT_EQ(basic["table2"]["c"].as_string(), "cc");
+
     ASSERT_EQ(basic["table2"]["subtable1"]["d"].as_integer(), 7);
     ASSERT_EQ(basic["table2"]["subtable1"]["e"].as_floating(), 8.0);
     ASSERT_EQ(basic["table2"]["subtable1"]["f"].as_string(), "ccc");
