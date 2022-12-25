@@ -8,7 +8,7 @@
 #include <memory>
 #include "NodeResourceTest.h"
 #include "resource/NodeResource.h"
-#include "../../mocks/MockResource.h"
+#include "MockResource.h"
 
 void NodeResourceTest::SetUp()
 {
@@ -23,4 +23,28 @@ void NodeResourceTest::TearDown()
 TEST_F(NodeResourceTest, construct)
 {
     NodeResource resource("name");
+}
+
+TEST_F(NodeResourceTest, testName)
+{
+    NodeResource resource("test_name");
+    ASSERT_EQ(resource.get_name(), "test_name");
+}
+
+TEST_F(NodeResourceTest, testPath)
+{
+    NodeResource resource("name");
+
+    MockResource mock_parent;
+    EXPECT_CALL(mock_parent, get_path())
+            .WillOnce(::testing::Return(std::string("/mock/")));
+
+    set_parent_helper(resource, &mock_parent);
+    ASSERT_EQ(resource.get_path(), "/mock/name/");
+}
+
+TEST_F(NodeResourceTest, testType)
+{
+    NodeResource resource("name");
+    ASSERT_EQ(resource.get_type(), ResourceType::Node);
 }

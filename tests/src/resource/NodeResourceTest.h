@@ -17,8 +17,14 @@ namespace tcfg { }
 using namespace tcfg;
 
 class NodeResourceTest : public ::testing::Test {
+protected:
     void SetUp() override;
     void TearDown() override;
+
+    void set_parent_helper(NodeResource& resource, IResource* parent_resource)
+    {
+        resource.set_parent(parent_resource);
+    }
 };
 
 #endif //TOMLCONFIG_NODERESOURCETEST_H

@@ -13,6 +13,9 @@
 #include <memory>
 #include <toml.hpp>
 
+// forward declare test class
+class NodeResourceTest;
+
 namespace tcfg {
 
 class NodeResource : public IResource, public std::enable_shared_from_this<NodeResource> {
@@ -34,6 +37,7 @@ public:
 
 private:
     void set_parent(IResource* resource) override;
+    friend class ::NodeResourceTest;
 };
 
 } // tcfg
