@@ -9,6 +9,7 @@
 #include "NodeResourceTest.h"
 #include "resource/NodeResource.h"
 #include "MockResource.h"
+#include "utils/static_ptr.h"
 
 void NodeResourceTest::SetUp()
 {
@@ -47,4 +48,32 @@ TEST_F(NodeResourceTest, testType)
 {
     NodeResource resource("name");
     ASSERT_EQ(resource.get_type(), ResourceType::Node);
+}
+
+TEST_F(NodeResourceTest, testTOML)
+{
+    NodeResource resource("name");
+
+    MockResource mock_child1;
+    EXPECT_CALL(mock_child1, set_parent(&resource)).Times(1);
+    EXPECT_CALL(mock_child1, get_name())
+            .Times(2)
+            .WillRepeatedly(::testing::Return(std::string("child1")));
+    EXPECT_CALL(mock_child1, as_toml()).WillOnce(::testing::Return(toml::integer(1)));
+    resource.register_child(static_ptr(&mock_child1));
+
+    MockResource mock_child2;
+    EXPECT_CALL(mock_child2, set_parent(&resource)).Times(1);
+    EXPECT_CALL(mock_child2, get_name())
+            .Times(2)
+            .WillRepeatedly(::testing::Return(std::string("child2")));
+    EXPECT_CALL(mock_child2, as_toml()).WillOnce(::testing::Return(toml::integer(2)));
+    resource.register_child(static_ptr(&mock_child2));
+
+    auto value = resource.as_toml();
+    ASSERT_EQ(value.size(), 2);
+    ASSERT_TRUE(value["child1"].is_integer());
+    ASSERT_EQ(value["child1"].as_integer(), 1);
+    ASSERT_TRUE(value["child2"].is_integer());
+    ASSERT_EQ(value["child2"].as_integer(), 2);
 }

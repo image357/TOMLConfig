@@ -15,7 +15,7 @@ namespace tcfg {
 template<typename T>
 std::shared_ptr<T> static_ptr(T* ptr)
 {
-    return std::shared_ptr(ptr, [](T*) { });
+    return std::shared_ptr<T>(ptr, [](T*) { });
 }
 
 } // tcfg
