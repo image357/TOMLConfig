@@ -10,6 +10,7 @@
 #include "resource/NodeResource.h"
 #include "MockResource.h"
 #include "utils/static_ptr.h"
+#include "resource/ResourceException.h"
 
 void NodeResourceTest::SetUp()
 {
@@ -76,4 +77,23 @@ TEST_F(NodeResourceTest, testTOML)
     ASSERT_EQ(value["child1"].as_integer(), 1);
     ASSERT_TRUE(value["child2"].is_integer());
     ASSERT_EQ(value["child2"].as_integer(), 2);
+}
+
+TEST_F(NodeResourceTest, testNodeChain)
+{
+    NodeResource resource_1("name1");
+    NodeResource resource_2("name2");
+    resource_1.register_child(static_ptr(&resource_2));
+    ASSERT_EQ(get_parent_helper(resource_2), &resource_1);
+}
+
+TEST_F(NodeResourceTest, testThrowOnDuplicateChild)
+{
+    NodeResource resource_1("name1");
+    NodeResource resource_2("name2");
+    resource_1.register_child(static_ptr(&resource_2));
+    ASSERT_THROW(
+            resource_1.register_child(static_ptr(&resource_2)),
+            ResourceException
+    );
 }

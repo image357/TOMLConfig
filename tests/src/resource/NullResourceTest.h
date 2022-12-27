@@ -18,9 +18,15 @@ using namespace tcfg;
 
 class NullResourceTest : public ::testing::Test {
 protected:
-    NullResource& resource = NullResource::get_instance();
     void SetUp() override;
     void TearDown() override;
+
+    NullResource& default_resource = NullResource::get_instance();
+
+    void set_parent_helper(NullResource& resource, IResource* parent_resource)
+    {
+        resource.set_parent(parent_resource);
+    }
 };
 
 #endif //TOMLCONFIG_NULLRESOURCETEST_H

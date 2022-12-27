@@ -10,6 +10,8 @@
 
 #include "IResource.h"
 
+class NullResourceTest;
+
 namespace tcfg {
 
 class NullResource : public IResource {
@@ -24,6 +26,7 @@ public:
 
 private:
     void set_parent(IResource* resource) override;
+    friend class ::NullResourceTest;
 
 public:
     NullResource(const NullResource&) = delete;

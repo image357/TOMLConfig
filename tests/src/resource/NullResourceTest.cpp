@@ -6,6 +6,8 @@
 //
 
 #include "NullResourceTest.h"
+#include "MockResource.h"
+#include "resource/ResourceException.h"
 
 void NullResourceTest::SetUp()
 {
@@ -19,21 +21,30 @@ void NullResourceTest::TearDown()
 
 TEST_F(NullResourceTest, testName)
 {
-    ASSERT_EQ(resource.get_name(), "");
+    ASSERT_EQ(default_resource.get_name(), "");
 }
 
 TEST_F(NullResourceTest, testPath)
 {
-    ASSERT_EQ(resource.get_path(), "");
+    ASSERT_EQ(default_resource.get_path(), "");
 }
 
 TEST_F(NullResourceTest, testType)
 {
-    ASSERT_EQ(resource.get_type(), ResourceType::Null);
+    ASSERT_EQ(default_resource.get_type(), ResourceType::Null);
 }
 
 TEST_F(NullResourceTest, testTOML)
 {
-    ASSERT_TRUE(resource.as_toml().is_table());
-    ASSERT_EQ(resource.as_toml().size(), 0);
+    ASSERT_TRUE(default_resource.as_toml().is_table());
+    ASSERT_EQ(default_resource.as_toml().size(), 0);
+}
+
+TEST_F(NullResourceTest, testThrowOnSetParent)
+{
+    MockResource mock_resource;
+    ASSERT_THROW(
+            set_parent_helper(default_resource, &mock_resource),
+            ResourceException
+    );
 }

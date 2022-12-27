@@ -25,6 +25,10 @@ protected:
     {
         resource.set_parent(parent_resource);
     }
+    const IResource* get_parent_helper(NodeResource& resource)
+    {
+        return resource.m_parent;
+    }
 };
 
 #endif //TOMLCONFIG_NODERESOURCETEST_H
